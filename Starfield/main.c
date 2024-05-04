@@ -140,6 +140,7 @@ int main()
 
 //quatrième programme qui permet d'afficher du texte (click ou A) , une image et émettre un son
 
+#define _CRT_SECURE_NO_WARNINGS //pour pouvoir utiliser sprintf
 #include <SFML/Audio.h>
 #include <SFML/Graphics.h>
 #include <stdlib.h>
