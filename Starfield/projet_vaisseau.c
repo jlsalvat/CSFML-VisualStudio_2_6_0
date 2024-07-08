@@ -22,14 +22,6 @@
 #define SIZE_IMAGE 64
 #define INC_ANGLE 5
 
-void rotation_image(sfSprite* sprite, sfVector2u sizeImage, int angle) {
-	// si l'on veut faire une rotation de l'image par rapport au centre de l'image
-	//on doit récupérer son centre, et déplacer l'image avant de faire la rotation.
-	sfVector2f origin = sfSprite_getOrigin(sprite);
-	sfSprite_move(sprite, (sfVector2f) { sizeImage.x / 2, sizeImage.y / 2 });
-	sfSprite_rotate(sprite, angle);
-}
-
 int main()
 {
 	int collision = 0, tireBalle = 0;
@@ -44,6 +36,7 @@ int main()
 	sfVector2f posRect = { 0,0 };
 	sfVector2f posImage = { (L_WIN - SIZE_IMAGE),(H_WIN / 2) };
 	sfVector2f posBalle = posImage;
+	//Création rectangle
 	rect = sfRectangleShape_create();
 	sfRectangleShape_setFillColor(rect, sfRed);
 	sfRectangleShape_setSize(rect, (sfVector2f) { L_RECT, H_RECT });
@@ -58,30 +51,27 @@ int main()
 	sfSprite_rotate(sprite, angleImage);
 	//l'image du vaisseau est 4 fois trop grande on la réduit.
 	sfSprite_setScale(sprite, (sfVector2f) { 0.25, 0.25 });
-	//balle
+	//Création balle
 	balle = sfCircleShape_create();
 	sfCircleShape_setFillColor(balle, sfRed);
 	sfCircleShape_setRadius(balle, R_BALLE);
 	sfCircleShape_setPosition(balle, posBalle);
-
-
+	//Création fenêtre graphique
 	window = sfRenderWindow_create((sfVideoMode) { L_WIN, H_WIN, 32 }, "Rectangle", sfClose, NULL);
 	while (sfRenderWindow_isOpen(window)) {
 		// Process events 
-		while (sfRenderWindow_pollEvent(window, &event))
-		{
+		while (sfRenderWindow_pollEvent(window, &event))		{
 			if (event.type == sfEvtClosed || event.key.code == sfKeyEscape)
 				sfRenderWindow_close(window);
 			if (event.type == sfEvtKeyPressed) {
-
 				if (event.key.code == sfKeyW) {
 					angleImage += INC_ANGLE;
-					rotation_image(sprite, sizeImage, INC_ANGLE);
+					sfSprite_rotate(sprite, INC_ANGLE);
 
 				}
 				if (event.key.code == sfKeyX) {
 					angleImage -= INC_ANGLE;
-					rotation_image(sprite, sizeImage, -INC_ANGLE);
+					sfSprite_rotate(sprite, -INC_ANGLE);
 				}
 				if (event.key.code == sfKeyB) {
 					tireBalle = 1;
@@ -114,9 +104,9 @@ int main()
 		sfSleep((sfTime) { 20000 });
 	}
 	sfRectangleShape_destroy(rect);
-	sfRenderWindow_destroy(window);
 	sfSprite_destroy(sprite);
 	sfCircleShape_destroy(balle);
+	sfRenderWindow_destroy(window);
 	return EXIT_SUCCESS;
 }
 
